@@ -52,6 +52,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     // A placeholder username validation check
+    // MY TODO: modify username validation as required. edit strings>invalid_username if needed
     private boolean isUserNameValid(String username) {
         if (username == null) {
             return false;
@@ -64,6 +65,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     // A placeholder password validation check
+    // MY TODO: modify password validation as required. edit strings>invalid_password if needed
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
     }
