@@ -14,5 +14,6 @@ public interface FormPresenter {
 
     void submitButtonTapped();
 
-    void validate(String string);
+    void validateEmail(FormState formState, String string);
+    void validatePassword(FormState formState, String string);
 }

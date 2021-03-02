@@ -47,7 +47,7 @@ public class LoginPresenter implements FormPresenter, Serializable {
     @Override
     public void subtitleLinkTapped() {
         if (listener != null)
-            listener.moveToScreenY();
+            listener.moveToRegisterScreen();
     }
 
     @Override
@@ -55,13 +55,28 @@ public class LoginPresenter implements FormPresenter, Serializable {
         // send login request
         // onDone ----> move to next ...
         if (listener != null) {
-            listener.moveToScreenX();
+            //listener.moveTo...();
         }
     }
 
     @Override
-    public void validate(String string) {
-        if (listener != null)
-            listener.setButtonEnable(Validator.emailValidate(string));
+    public void validateEmail(FormState formState, String email) {
+        if (listener != null) {
+            boolean valid = Validator.email(email);
+            listener.showValidationError("first", valid);
+            formState.setFirstFieldValidation(valid);
+            listener.setButtonState();
+        }
     }
+
+    @Override
+    public void validatePassword(FormState formState, String password) {
+        if (listener != null) {
+            boolean valid = Validator.password(password);
+            listener.showValidationError("second", valid);
+            formState.setSecondFieldValidation(valid);
+            listener.setButtonState();
+        }
+    }
+
 }

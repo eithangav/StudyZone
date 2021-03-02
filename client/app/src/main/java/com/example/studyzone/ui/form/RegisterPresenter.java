@@ -1,7 +1,5 @@
 package com.example.studyzone.ui.form;
 
-import android.util.Log;
-
 import java.io.Serializable;
 
 public class RegisterPresenter implements FormPresenter, Serializable {
@@ -46,7 +44,8 @@ public class RegisterPresenter implements FormPresenter, Serializable {
 
     @Override
     public void subtitleLinkTapped() {
-
+        if (listener != null)
+            listener.moveToLoginScreen();
     }
 
     @Override
@@ -54,13 +53,28 @@ public class RegisterPresenter implements FormPresenter, Serializable {
         // send request to the server fort registration
         // onDone ---> move to next screen
         if (listener != null) {
-            listener.moveToScreenY();
+            //listener.moveTo...();
         }
     }
 
     @Override
-    public void validate(String string) {
-        if (listener != null)
-            listener.setButtonEnable(Validator.emailValidate(string));
+    public void validateEmail(FormState formState, String email) {
+        if (listener != null) {
+            boolean valid = Validator.email(email);
+            listener.showValidationError("first", valid);
+            formState.setFirstFieldValidation(valid);
+            listener.setButtonState();
+        }
+    }
+
+    @Override
+    public void validatePassword(FormState formState, String password) {
+        if (listener != null) {
+            boolean valid = Validator.password(password);
+            listener.showValidationError("second", valid);
+            formState.setSecondFieldValidation(valid);
+            listener.setButtonState();
+        }
     }
 }
+
