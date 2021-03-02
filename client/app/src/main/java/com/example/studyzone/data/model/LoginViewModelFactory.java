@@ -1,4 +1,4 @@
-package com.example.studyzone.ui.login;
+package com.example.studyzone.data.model;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
