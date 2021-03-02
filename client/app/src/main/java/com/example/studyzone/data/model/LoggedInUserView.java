@@ -1,4 +1,4 @@
-package com.example.studyzone.ui.login;
+package com.example.studyzone.data.model;
 
 /**
  * Class exposing authenticated user details to the UI.
