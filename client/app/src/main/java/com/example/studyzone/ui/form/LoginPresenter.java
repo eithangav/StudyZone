@@ -53,9 +53,9 @@ public class LoginPresenter implements FormPresenter, Serializable {
     @Override
     public void submitButtonTapped() {
         // send login request
-        // onDone ----> move to next ...
+        // onDone ----> move to map...
         if (listener != null) {
-            //listener.moveTo...();
+            listener.moveToMapScreen();
         }
     }
 

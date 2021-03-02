@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.studyzone.R;
+import com.example.studyzone.ui.map.MapActivity;
 
 /**
  * Main Activity, used for both Login and Registration forms. Uses Presenters to switch them.
@@ -120,14 +121,11 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         presenter.setListener(this);
     }
 
-    /**
-     * FormPresenterListener methods implementation
-     * triggered by the Presenters' methods
-     **/
+    /**------------------FormPresenterListener methods implementation--------------------------
+     * ------------------triggered by the Presenters' methods-------------------------------**/
 
     @Override
     public void moveToRegisterScreen() {
-        // go to screen x
         RegisterPresenter presenter = new RegisterPresenter();
         Bundle bundle = new Bundle();
         bundle.putSerializable("presenter", presenter);
@@ -138,12 +136,17 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
 
     @Override
     public void moveToLoginScreen() {
-        // go to screen y
         LoginPresenter presenter = new LoginPresenter();
         Bundle bundle = new Bundle();
         bundle.putSerializable("presenter", presenter);
         Intent intent = new Intent(this, FormActivity.class);
         intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void moveToMapScreen() {
+        Intent intent = new Intent(this, MapActivity.class);
         startActivity(intent);
     }
 
