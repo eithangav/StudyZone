@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "461942481833",
+    "project_id": "studyzone-b8d2d",
+    "storage_bucket": "studyzone-b8d2d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461942481833:android:31052c226e23d657289ab8",
+        "android_client_info": {
+          "package_name": "com.example.studyzone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "461942481833-pn09qacreco6c97p4pt69l7n2nqomj7q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr8e0-UfIJVziBFoHjZF0xH1QS1_hHPjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "461942481833-pn09qacreco6c97p4pt69l7n2nqomj7q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

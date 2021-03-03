@@ -20,6 +20,12 @@ import com.example.studyzone.data.user.LoginFetcher;
 import com.example.studyzone.data.user.RegistrationFetcher;
 import com.example.studyzone.ui.map.MapActivity;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 /**
  * Main Activity, used for both Login and Registration forms. Uses Presenters to switch them.
@@ -112,6 +118,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: handle getting users token when clicked
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 presenter.submitButtonTapped(v);
             }
@@ -127,6 +134,9 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         // listener initialization
         presenter.setListener(this);
     }
+
+    /**------------------FormPresenterListener methods implementation--------------------------
+     * ------------------triggered by the Presenters' methods-------------------------------**/
 
     @Override
     public void fetchLogin(final View view) {
@@ -175,9 +185,6 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
             }
         });
     }
-
-    /**------------------FormPresenterListener methods implementation--------------------------
-     * ------------------triggered by the Presenters' methods-------------------------------**/
 
     @Override
     public void moveToRegisterScreen() {
