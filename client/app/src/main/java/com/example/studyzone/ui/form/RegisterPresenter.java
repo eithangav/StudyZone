@@ -1,5 +1,7 @@
 package com.example.studyzone.ui.form;
 
+import android.view.View;
+
 import java.io.Serializable;
 
 public class RegisterPresenter implements FormPresenter, Serializable {
@@ -49,11 +51,10 @@ public class RegisterPresenter implements FormPresenter, Serializable {
     }
 
     @Override
-    public void submitButtonTapped() {
-        // send request to the server fort registration
-        // onDone ---> move to next screen
+    public void submitButtonTapped(View view) {
+        // send registration request
         if (listener != null) {
-            //listener.moveTo...();
+            listener.fetchRegistration(view);
         }
     }
 
