@@ -1,6 +1,8 @@
 package com.example.studyzone.ui.form;
 
-import android.util.Log;
+import android.view.View;
+
+import com.example.studyzone.data.user.LoginFetcher;
 
 import java.io.Serializable;
 
@@ -51,11 +53,10 @@ public class LoginPresenter implements FormPresenter, Serializable {
     }
 
     @Override
-    public void submitButtonTapped() {
+    public void submitButtonTapped(View view) {
         // send login request
-        // onDone ----> move to map...
         if (listener != null) {
-            listener.moveToMapScreen();
+            listener.fetchLogin(view);
         }
     }
 

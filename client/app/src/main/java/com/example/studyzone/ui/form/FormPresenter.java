@@ -1,5 +1,7 @@
 package com.example.studyzone.ui.form;
 
+import android.view.View;
+
 public interface FormPresenter {
     String getScreenTitle();
     String getSubtitlePrefix();
@@ -12,7 +14,7 @@ public interface FormPresenter {
     void setListener(FormPresenterListener listener);
     void subtitleLinkTapped();
 
-    void submitButtonTapped();
+    void submitButtonTapped(View view);
 
     void validateEmail(FormState formState, String string);
     void validatePassword(FormState formState, String string);

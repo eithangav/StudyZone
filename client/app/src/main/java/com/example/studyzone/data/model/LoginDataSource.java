@@ -1,6 +1,4 @@
-package com.example.studyzone.data;
-
-import com.example.studyzone.data.model.LoggedInUser;
+package com.example.studyzone.data.model;
 
 import java.io.IOException;
 

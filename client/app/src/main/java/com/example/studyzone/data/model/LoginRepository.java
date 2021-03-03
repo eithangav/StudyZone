@@ -1,6 +1,4 @@
-package com.example.studyzone.data;
-
-import com.example.studyzone.data.model.LoggedInUser;
+package com.example.studyzone.data.model;
 
 /**
  * Class that requests authentication and user information from the remote data source and

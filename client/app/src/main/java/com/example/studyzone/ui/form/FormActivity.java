@@ -13,9 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.studyzone.R;
+import com.example.studyzone.data.user.LoginFetcher;
+import com.example.studyzone.data.user.RegistrationFetcher;
 import com.example.studyzone.ui.map.MapActivity;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Main Activity, used for both Login and Registration forms. Uses Presenters to switch them.
@@ -33,7 +37,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
     private EditText firstEditText;
     private EditText secondEditText;
     private Button submitButton;
-    private ProgressBar loadingBar;
+    private ProgressBar loadingProgressBar;
     private FormState formState;
 
     @Override
@@ -56,8 +60,9 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         firstEditText = findViewById(R.id.first_field);
         secondEditText = findViewById(R.id.second_field);
         submitButton = findViewById(R.id.submit_button);
-        loadingBar = findViewById(R.id.loading);
+        loadingProgressBar = findViewById(R.id.loading);
 
+        //sets the fields' initial values
         titleTextView.setText(presenter.getScreenTitle());
         subtitlePrefixTextView.setText(presenter.getSubtitlePrefix());
         subtitleSuffixTextView.setText(presenter.getSubtitleSuffix());
@@ -66,18 +71,18 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         submitButton.setText(presenter.getSubmitButtonTitle());
         submitButton.setEnabled(false);
         formState = new FormState();
-        //need to add loading bar status and edit later
+        loadingProgressBar.setVisibility(View.GONE);
 
         //first EditText validation
         firstEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                //ignore
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                //ignore
             }
 
             @Override
@@ -90,12 +95,12 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         secondEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                //ignore
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                //ignore
             }
 
             @Override
@@ -107,7 +112,8 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.submitButtonTapped();
+                loadingProgressBar.setVisibility(View.VISIBLE);
+                presenter.submitButtonTapped(v);
             }
         });
 
@@ -118,7 +124,56 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
             }
         });
 
+        // listener initialization
         presenter.setListener(this);
+    }
+
+    @Override
+    public void fetchLogin(final View view) {
+        final LoginFetcher fetcher = new LoginFetcher(view.getContext());
+        final String email = ((EditText)findViewById(R.id.first_field)).getText().toString();
+        final String password = ((EditText)findViewById(R.id.second_field)).getText().toString();
+        final String token = "TEST_TOKEN"; // TODO: get user's real token
+        final LatLng location = new LatLng(35, 35); // TODO: get user's real location
+        // TODO: consider progressDialog usage instead of progressBar...
+
+        fetcher.dispatchRequest(email, password, token, location, new LoginFetcher.LoginResponseListener() {
+                    @Override
+                    public void onResponse(LoginFetcher.LoginResponse response) {
+                        loadingProgressBar.setVisibility(View.GONE);
+                        if (response.isError)
+                            Toast.makeText(view.getContext(), "Login server error", Toast.LENGTH_LONG).show();
+                        else if (!response.emailExists)
+                            Toast.makeText(view.getContext(), "Wrong Email address", Toast.LENGTH_LONG).show();
+                        else if (!response.passwordMatches)
+                            Toast.makeText(view.getContext(), "Wrong password", Toast.LENGTH_LONG).show();
+                        else
+                            moveToMapScreen();
+                    }
+                });
+    }
+
+    @Override
+    public void fetchRegistration(final View view) {
+        final RegistrationFetcher fetcher = new RegistrationFetcher(view.getContext());
+        final String email = ((EditText)findViewById(R.id.first_field)).getText().toString();
+        final String password = ((EditText)findViewById(R.id.second_field)).getText().toString();
+        // TODO: consider progressDialog usage instead of progressBar...
+
+        fetcher.dispatchRequest(email, password, new RegistrationFetcher.RegistrationResponseListener() {
+            @Override
+            public void onResponse(RegistrationFetcher.RegistrationResponse response) {
+                loadingProgressBar.setVisibility(View.GONE);
+                if (response.isError)
+                    Toast.makeText(view.getContext(), "Registration server error", Toast.LENGTH_LONG).show();
+                else if (!response.hasSucceeded)
+                    Toast.makeText(view.getContext(), "Email already exists", Toast.LENGTH_LONG).show();
+                else {
+                    Toast.makeText(view.getContext(), "Successfully registered!", Toast.LENGTH_LONG).show();
+                    moveToLoginScreen();
+                }
+            }
+        });
     }
 
     /**------------------FormPresenterListener methods implementation--------------------------
@@ -174,6 +229,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
                 return;
         }
     }
+
 }
 
 

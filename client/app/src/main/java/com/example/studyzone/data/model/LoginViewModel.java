@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel;
 
 import android.util.Patterns;
 
-import com.example.studyzone.data.LoginRepository;
-import com.example.studyzone.data.Result;
 import com.example.studyzone.R;
 
 public class LoginViewModel extends ViewModel {
