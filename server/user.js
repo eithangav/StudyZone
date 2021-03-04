@@ -1,4 +1,3 @@
-const { Decimal128 } = require('bson');
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -16,11 +15,11 @@ const UserSchema = new mongoose.Schema({
         required: false
     },
     latitude: {
-        type: Decimal128,
+        type: Number,
         required: false
     },
     longitude: {
-        type: Decimal128,
+        type: Number,
         required: false
     }
 });

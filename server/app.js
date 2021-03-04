@@ -10,6 +10,7 @@ const FCM = require('fcm-push');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const User = require('./user');
+const Zone = require('./zone');
 
 //globals
 const MONGO_URL = "mongodb://localhost:27017/";
@@ -113,6 +114,69 @@ app.post('/register', (req, res) => {
     res.status(200).json({
         status: "Success"
     });
+});
+
+app.get('/zones', (req, res) => {
+    let found_zones = []
+    Zone.find((err, zones) => {
+        zones.forEach(zone => {
+            found_zones.push({_id: zone._id, 
+                latitude: zone.latitude, 
+                longitude: zone.longitude,
+                name: zone.name});
+        })
+        res.json(found_zones);
+    });
+});
+
+app.post('/zones', (req, res) => {
+    console.log(req.body._id);
+    const zone = new Zone({
+        _id: req.body._id,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        name: req.body.name,
+        description: req.body.description,
+        crowdedRating: 0,
+        foodRating: 0,
+        priceRating: 0,
+        numRatings: 0,
+        reviews: []
+    });
+    zone.save();
+    res.json({success: true});
+    
+});
+
+app.get('/zone/:id', (req, res) => {
+    Zone.findOne({_id: req.params.id}, (err, zone) => {
+        if(err){
+            res.json({status: "fail"});
+        }
+        res.json(zone);
+    });
+})
+
+app.post('/zone/:id', (req, res) => {
+    Zone.findOne({_id: req.params.id}, (err, zone) => {
+        if(err){
+            res.json({status: "fail"});
+        }
+        //calculation of running average
+        zone.foodRating = ((zone.foodRating * zone.numRatings) + req.body.foodRating)/(zone.numRatings + 1);
+        zone.crowdedRating = ((zone.crowdedRating * zone.numRatings) + req.body.crowdedRating)/(zone.numRatings + 1);
+        zone.priceRating = ((zone.priceRating * zone.numRatings) + req.body.priceRating)/(zone.numRatings + 1);
+        zone.reviews.push({"content": req.body.review});
+        zone.numRatings += 1;
+        console.log(zone.foodRating);
+        console.log(zone.numRatings);
+        zone.save();
+        res.json({success: true});
+    });
+});
+
+app.post('/checkin', (req, res) => {
+    
 });
 
 app.listen(3000, () => {
