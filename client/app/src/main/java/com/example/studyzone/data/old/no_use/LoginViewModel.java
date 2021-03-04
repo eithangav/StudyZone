@@ -1,4 +1,4 @@
-package com.example.studyzone.data.model;
+package com.example.studyzone.data.old.no_use;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel;
 import android.util.Patterns;
 
 import com.example.studyzone.R;
+import com.example.studyzone.data.user.LoggedInUser;
+import com.example.studyzone.data.old.no_use.LoggedInUserView;
 
 public class LoginViewModel extends ViewModel {
 
@@ -32,7 +34,7 @@ public class LoginViewModel extends ViewModel {
 
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+            loginResult.setValue(new LoginResult(new LoggedInUserView(/*data.getDisplayName()*/"")));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }

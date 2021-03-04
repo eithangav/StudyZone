@@ -1,6 +1,8 @@
-package com.example.studyzone.data.model;
+package com.example.studyzone.data.old.no_use;
 
 import androidx.annotation.Nullable;
+
+import com.example.studyzone.data.old.no_use.LoggedInUserView;
 
 /**
  * Authentication result : success (user details) or error message.

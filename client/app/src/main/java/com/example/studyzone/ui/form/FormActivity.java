@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.studyzone.R;
+import com.example.studyzone.data.user.LoggedInUser;
 import com.example.studyzone.data.user.LoginFetcher;
 import com.example.studyzone.data.user.RegistrationFetcher;
 import com.example.studyzone.ui.map.MapActivity;
@@ -75,9 +76,9 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         firstEditText.setHint(presenter.getFirstTextFieldHint());
         secondEditText.setHint(presenter.getSecondTextFieldHint());
         submitButton.setText(presenter.getSubmitButtonTitle());
+        loadingProgressBar.setVisibility(View.GONE);
         submitButton.setEnabled(false);
         formState = new FormState();
-        loadingProgressBar.setVisibility(View.GONE);
 
         //first EditText validation
         firstEditText.addTextChangedListener(new TextWatcher() {
@@ -158,7 +159,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
                         else if (!response.passwordMatches)
                             Toast.makeText(view.getContext(), "Wrong password", Toast.LENGTH_LONG).show();
                         else
-                            moveToMapScreen();
+                            moveToMapScreen(new LoggedInUser(email, location));
                     }
                 });
     }
@@ -207,8 +208,11 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
     }
 
     @Override
-    public void moveToMapScreen() {
+    public void moveToMapScreen(LoggedInUser loggedInUser) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("loggedInUser", loggedInUser);
         Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 

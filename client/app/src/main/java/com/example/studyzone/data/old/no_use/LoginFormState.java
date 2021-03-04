@@ -1,4 +1,4 @@
-package com.example.studyzone.data.model;
+package com.example.studyzone.data.old.no_use;
 
 import androidx.annotation.Nullable;
 

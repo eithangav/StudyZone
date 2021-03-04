@@ -1,4 +1,4 @@
-package com.example.studyzone.data.model;
+package com.example.studyzone.data.old.no_use;
 
 /**
  * A generic class that holds a result success w/ data or an error exception.
