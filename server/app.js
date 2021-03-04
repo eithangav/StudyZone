@@ -4,8 +4,6 @@
 const express = require('express');
 const session = require('express-session');
 const mongoose = require('mongoose');
-const passport = require('passport');
-const localStrategy = require('passport-local').Strategy;
 const FCM = require('fcm-push');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
@@ -35,31 +33,41 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// set passport.js
-app.use(passport.initialize());
-app.use(passport.session());
 
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
-        done(err, user);
-    })
-});
-
-passport.use(new localStrategy((username, password, done) => {
+/**
+ * Sends a notification to give token about checkin of a user to a zone
+ * @param {string} token 
+ * @param {string} zone 
+ */
+const send_notification = (token, zone) => {
+    fcm.send({
+        to: token,
+        data: {},
+        notification: {
+            title: "A user checked in nearby!",
+            body: "Go check " + zone + " to study toghether!"
+        }
+    }, (error, response) => {
+        if(error){
+            console.log(error);
+        }
+    });
     
-}))
-
-const isLoggedIn = (req, res, next) => {
-    if(req.isAuthenticated()) return next;
 }
 
-
+/**
+ * Express route for user login.
+ * Body parameters: 
+ * email (string), 
+ * password (string), 
+ * token (string),
+ * longitude (number),
+ * latitude (number)
+ */
 app.post('/login', (req, res) => {
-    if(!req.body.email){
-        res.json({emailExists: false, passwordMatches: false});
+    // verify email is not empty
+    if(req.body.email || req.body.email == ""){
+        return res.json({emailExists: false, passwordMatches: false});
     }
     User.findOne({email: req.body.email}, (err, user) => {
         if(err) {
@@ -175,8 +183,27 @@ app.post('/zone/:id', (req, res) => {
     });
 });
 
-app.post('/checkin', (req, res) => {
-    
+app.post('/checkin', async (req, res) => {
+    const email = req.body.email;
+    const zone = await Zone.findOne({_id: req.body.id});
+    const latitude = zone.latitude;
+    const longitude = zone.longitude;
+    User.find(
+        {email: {$ne: email}, 
+        longitude: {$lte: longitude + 1, $gte: longitude - 1},
+        latitude: {$lte: latitude + 1, $gte: latitude - 1}},
+        (err, users) => {
+            if(err){
+                console.log(err);
+                res.json({success: false});
+            }
+            users.forEach(user => {
+                if(user.token != undefined){
+                    send_notification(user.token, zone.name);
+                }
+            });
+        });
+        res.json({success: true});
 });
 
 app.listen(3000, () => {
