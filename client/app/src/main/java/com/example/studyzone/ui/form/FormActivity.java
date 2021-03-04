@@ -146,7 +146,6 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         final String password = ((EditText)findViewById(R.id.second_field)).getText().toString();
         final String token = "TEST_TOKEN"; // TODO: get user's real token
         final LatLng location = new LatLng(35, 35); // TODO: get user's real location
-        // TODO: consider progressDialog usage instead of progressBar...
 
         fetcher.dispatchRequest(email, password, token, location, new LoginFetcher.LoginResponseListener() {
                     @Override
@@ -169,7 +168,6 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         final RegistrationFetcher fetcher = new RegistrationFetcher(view.getContext());
         final String email = ((EditText)findViewById(R.id.first_field)).getText().toString();
         final String password = ((EditText)findViewById(R.id.second_field)).getText().toString();
-        // TODO: consider progressDialog usage instead of progressBar...
 
         fetcher.dispatchRequest(email, password, new RegistrationFetcher.RegistrationResponseListener() {
             @Override

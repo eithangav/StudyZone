@@ -2,11 +2,14 @@ package com.example.studyzone.ui.map;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.studyzone.R;
 import com.example.studyzone.data.user.LoggedInUser;
-import com.example.studyzone.ui.form.FormPresenter;
+import com.example.studyzone.ui.form.FormActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -18,6 +21,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     private GoogleMap mMap;
     private LoggedInUser loggedInUser = null;
+
+    // status bar objects initialization
+    private TextView logOutTextView;
+    private TextView goBackTextView;
+    private TextView userEmailTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +39,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             if (user != null)
                 this.loggedInUser = user;
         }
+
+        // use helper method to set up the status bar
+        statusBarSetUp();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -64,5 +75,24 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     public void loadZonesMarkers() {
         // TODO: GET request and add markers by locations
+    }
+
+    public void statusBarSetUp() {
+        // get status_bar layout fields
+        goBackTextView = findViewById(R.id.back_to_some_page_link);
+        logOutTextView = findViewById(R.id.logout_link);
+        userEmailTextView = findViewById(R.id.user_email);
+        // set fields value
+        goBackTextView.setVisibility(View.GONE);
+        userEmailTextView.setText(loggedInUser.getUserEmail());
+
+        logOutTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // go to sign in page
+                Intent intent = new Intent(v.getContext(), FormActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
