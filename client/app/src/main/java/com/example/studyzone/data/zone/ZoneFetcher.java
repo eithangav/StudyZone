@@ -16,7 +16,7 @@ import org.json.JSONObject;
 public class ZoneFetcher {
 
     private RequestQueue _queue;
-    private String REQUEST_URL = "";
+    private String REQUEST_URL = "http://localhost:3000/zone/";
 
     public class ZoneResponse {
         public boolean isError;

@@ -15,7 +15,7 @@ import org.json.JSONObject;
 public class RegistrationFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "";
+    private final static String REQUEST_URL = "http://localhost:3000/register";
 
     public class RegistrationResponse{
         public boolean isError;

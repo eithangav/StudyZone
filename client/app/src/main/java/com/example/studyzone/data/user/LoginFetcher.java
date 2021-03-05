@@ -16,7 +16,7 @@ import org.json.JSONObject;
 public class LoginFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "";
+    private final static String REQUEST_URL = "http://localhost:3000/login";
 
     public class LoginResponse {
         public boolean isError;

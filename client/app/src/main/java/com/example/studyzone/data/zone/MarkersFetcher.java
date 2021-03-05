@@ -9,19 +9,20 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MarkersFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "";
+    private final static String REQUEST_URL = "http://localhost:3000/zones";
 
     public class MarkersResponse {
         public boolean isError;
-        public JSONObject markers;
+        public JSONArray markers;
 
-        public MarkersResponse(boolean isError, JSONObject markers) {
+        public MarkersResponse(boolean isError, JSONArray markers) {
             this.isError = isError;
             this.markers = markers;
         }
@@ -46,7 +47,7 @@ public class MarkersFetcher {
                     public void onResponse(JSONObject response) {
                         try {
                             MarkersResponse res = new MarkersResponse(false,
-                                    response.getJSONObject("markers"));
+                                    response.getJSONArray("markers"));
                             listener.onResponse(res);
                         } catch (JSONException e) {
                             listener.onResponse(createErrorResponse());
