@@ -13,6 +13,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * a class to fetch all zones' location and names from the server using GET request
+ * in order to show them in the map
+ */
 public class MarkersFetcher {
 
     private RequestQueue _queue;

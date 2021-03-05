@@ -4,6 +4,9 @@ import android.view.View;
 
 import com.example.studyzone.data.user.LoggedInUser;
 
+/**
+ * an interface for Login and Register presenter listeners
+ */
 public interface FormPresenterListener {
     void moveToLoginScreen();
     void moveToRegisterScreen();

@@ -13,6 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * a class to fetch specific zone's details from the server using GET request
+ */
 public class ZoneFetcher {
 
     private RequestQueue _queue;

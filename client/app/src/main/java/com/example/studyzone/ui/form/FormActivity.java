@@ -35,7 +35,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
  */
 public class FormActivity extends AppCompatActivity implements FormPresenterListener {
 
-    //initial Presenter: Login
+    // initial Presenter: Login
     private FormPresenter presenter = new LoginPresenter();
 
     private TextView titleTextView;
@@ -52,7 +52,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
 
-        //loads the required presenter kind (Login/Register)
+        // loads the required presenter kind (Login/Register)
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null){
             FormPresenter presenter = (FormPresenter)bundle.getSerializable("presenter");
@@ -60,7 +60,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
                 this.presenter = presenter;
         }
 
-        //sets the required layer's fields
+        // sets the required layer's fields
         titleTextView = findViewById(R.id.title);
         subtitlePrefixTextView = findViewById(R.id.subtitle_prefix);
         subtitleSuffixTextView = findViewById(R.id.subtitle_clickable_suffix);
@@ -69,7 +69,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         submitButton = findViewById(R.id.submit_button);
         loadingProgressBar = findViewById(R.id.loading);
 
-        //sets the fields' initial values
+        // sets the fields' initial values
         titleTextView.setText(presenter.getScreenTitle());
         subtitlePrefixTextView.setText(presenter.getSubtitlePrefix());
         subtitleSuffixTextView.setText(presenter.getSubtitleSuffix());
@@ -80,7 +80,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         submitButton.setEnabled(false);
         formState = new FormState();
 
-        //first EditText validation
+        // first EditText validation
         firstEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -98,7 +98,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
             }
         });
 
-        //second EditText validation
+        // second EditText validation
         secondEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -116,6 +116,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
             }
         });
 
+        // submit button onClick listener
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +126,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
             }
         });
 
+        // Login/Register switcher onClick listener
         subtitleSuffixTextView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -136,9 +138,14 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         presenter.setListener(this);
     }
 
-    /**------------------FormPresenterListener methods implementation--------------------------
-     * ------------------triggered by the Presenters' methods-------------------------------**/
+    /*------------------FormPresenterListener interface methods implementation--------------------------
+     * ----------------------------triggered by the Presenters' methods-------------------------------*/
 
+    /**
+     * preforms a server request using LoginFetcher and Toasts accordingly
+     * if succeeded, moving to map screen
+     * @param view to Toast on
+     */
     @Override
     public void fetchLogin(final View view) {
         final LoginFetcher fetcher = new LoginFetcher(this);
@@ -163,6 +170,11 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
                 });
     }
 
+    /**
+     * preforms a server request using RegisterFetcher and Toasts accordingly
+     * if succeeded, moving to login screen
+     * @param view to Toast on
+     */
     @Override
     public void fetchRegistration(final View view) {
         final RegistrationFetcher fetcher = new RegistrationFetcher(this);
@@ -185,6 +197,9 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         });
     }
 
+    /**
+     * moves to registration screen in RegisterPresenter mode
+     */
     @Override
     public void moveToRegisterScreen() {
         RegisterPresenter presenter = new RegisterPresenter();
@@ -195,6 +210,9 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         startActivity(intent);
     }
 
+    /**
+     * moves to login screen in LoginPresenter mode
+     */
     @Override
     public void moveToLoginScreen() {
         LoginPresenter presenter = new LoginPresenter();
@@ -205,6 +223,10 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         startActivity(intent);
     }
 
+    /**
+     * moves to map screen with the loggedInUser object in bundle
+     * @param loggedInUser
+     */
     @Override
     public void moveToMapScreen(LoggedInUser loggedInUser) {
         Bundle bundle = new Bundle();
@@ -214,11 +236,19 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         startActivity(intent);
     }
 
+    /**
+     * sets the form's button "enabled"
+     */
     @Override
     public void setButtonState() {
         submitButton.setEnabled(formState.getFormState());
     }
 
+    /**
+     * handles form validation fields errors
+     * @param fieldName email or password field
+     * @param valid the validation result
+     */
     @Override
     public void showValidationError(String fieldName, boolean valid) {
         switch (fieldName){

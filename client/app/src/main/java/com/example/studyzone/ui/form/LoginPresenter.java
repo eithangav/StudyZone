@@ -6,6 +6,9 @@ import com.example.studyzone.data.user.LoginFetcher;
 
 import java.io.Serializable;
 
+/**
+ * a presenter class to present the FormActivity in "login" mode
+ */
 public class LoginPresenter implements FormPresenter, Serializable {
 
     FormPresenterListener listener;
@@ -60,6 +63,12 @@ public class LoginPresenter implements FormPresenter, Serializable {
         }
     }
 
+    /**
+     * preforms email validation using Validator class
+     * and updates the form state as required
+     * @param formState
+     * @param email
+     */
     @Override
     public void validateEmail(FormState formState, String email) {
         if (listener != null) {
@@ -70,6 +79,12 @@ public class LoginPresenter implements FormPresenter, Serializable {
         }
     }
 
+    /**
+     * preforms password validation using Validator class
+     * and updates the form state as required
+     * @param formState
+     * @param password
+     */
     @Override
     public void validatePassword(FormState formState, String password) {
         if (listener != null) {

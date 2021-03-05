@@ -2,6 +2,9 @@ package com.example.studyzone.ui.form;
 
 import android.view.View;
 
+/**
+ * an interface for FormActivity modes- Login / Register
+ */
 public interface FormPresenter {
     String getScreenTitle();
     String getSubtitlePrefix();

@@ -1,5 +1,9 @@
 package com.example.studyzone.ui.form;
 
+/**
+ * a class to hold the form state validation
+ * combining both first and second fields validation
+ */
 public class FormState {
 
     private boolean firstField;
