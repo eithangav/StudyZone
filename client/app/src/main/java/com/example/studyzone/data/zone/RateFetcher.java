@@ -15,7 +15,7 @@ import org.json.JSONObject;
 public class RateFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "http://localhost:3000/zone/";
+    private String REQUEST_URL = "http://localhost:3000/zone/";
 
     public class RateResponse {
         public boolean isError;
@@ -41,6 +41,7 @@ public class RateFetcher {
 
     public void dispatchRequest(final int id, final double crowdedRating, final double foodRating,
                                 final double priceRating, final String review, final RateResponseListener listener) {
+        this.REQUEST_URL += String.valueOf(id);
         JSONObject postBody = new JSONObject();
         try {
             postBody.put("id", id);
