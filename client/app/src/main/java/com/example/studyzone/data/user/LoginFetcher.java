@@ -18,7 +18,7 @@ public class LoginFetcher {
     private RequestQueue _queue;
     private final static String REQUEST_URL = "";
 
-    public class LoginResponse{
+    public class LoginResponse {
         public boolean isError;
         public boolean emailExists;
         public boolean passwordMatches;
@@ -72,11 +72,11 @@ public class LoginFetcher {
                         }
                     }
                 }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                listener.onResponse(createErrorResponse());
-            }
-        });
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        listener.onResponse(createErrorResponse());
+                    }
+                });
 
         _queue.add(req);
     }
