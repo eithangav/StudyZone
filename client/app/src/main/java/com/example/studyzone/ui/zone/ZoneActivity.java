@@ -65,6 +65,7 @@ public class ZoneActivity extends AppCompatActivity {
         // fetch and set up zone's fields
         fetchZone();
 
+        // check in button onClick listener
         checkInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +90,7 @@ public class ZoneActivity extends AppCompatActivity {
         goBackTextView.setText("Back to map");
         userEmailTextView.setText(loggedInUser.getUserEmail());
 
+        // on Logout click --> move to Login screen
         logOutTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +100,7 @@ public class ZoneActivity extends AppCompatActivity {
             }
         });
 
+        // on Go back click --> go back to map screen
         goBackTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +121,7 @@ public class ZoneActivity extends AppCompatActivity {
     public void fetchZone() {
         final ZoneFetcher fetcher = new ZoneFetcher(this);
 
+        // server request
         fetcher.dispatchRequest(this.id, new ZoneFetcher.ZoneResponseListener() {
             @Override
             public void onResponse(ZoneFetcher.ZoneResponse response) {
@@ -162,6 +166,7 @@ public class ZoneActivity extends AppCompatActivity {
     public void fetchCheckIn(View view) {
         final CheckInFetcher fetcher = new CheckInFetcher(this);
 
+        // server request
         fetcher.dispatchRequest(id, loggedInUser.getUserEmail(),
                 new CheckInFetcher.CheckInResponseListener() {
             @Override

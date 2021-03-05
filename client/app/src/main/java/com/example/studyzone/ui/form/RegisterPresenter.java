@@ -4,6 +4,9 @@ import android.view.View;
 
 import java.io.Serializable;
 
+/**
+ * a presenter class to present the FormActivity in "register" mode
+ */
 public class RegisterPresenter implements FormPresenter, Serializable {
 
     FormPresenterListener listener;
@@ -58,6 +61,12 @@ public class RegisterPresenter implements FormPresenter, Serializable {
         }
     }
 
+    /**
+     * preforms email validation using Validator class
+     * and updates the form state as required
+     * @param formState
+     * @param email
+     */
     @Override
     public void validateEmail(FormState formState, String email) {
         if (listener != null) {
@@ -68,6 +77,12 @@ public class RegisterPresenter implements FormPresenter, Serializable {
         }
     }
 
+    /**
+     * preforms password validation using Validator class
+     * and updates the form state as required
+     * @param formState
+     * @param password
+     */
     @Override
     public void validatePassword(FormState formState, String password) {
         if (listener != null) {

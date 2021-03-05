@@ -12,6 +12,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * a class to preform "check in" (notify all close users) using POST request
+ */
 public class CheckInFetcher {
 
     private RequestQueue _queue;

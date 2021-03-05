@@ -12,6 +12,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * a class to update a user's rating on a specific zone in the server using POST request
+ */
 public class RateFetcher {
 
     private RequestQueue _queue;

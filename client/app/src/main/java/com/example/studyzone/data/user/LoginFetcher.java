@@ -13,6 +13,9 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * a class to check if the user is registered (by: email, password) using POST request
+ */
 public class LoginFetcher {
 
     private RequestQueue _queue;

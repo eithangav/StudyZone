@@ -12,6 +12,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * a class to create a new user account in the DB using POST request
+ */
 public class RegistrationFetcher {
 
     private RequestQueue _queue;
