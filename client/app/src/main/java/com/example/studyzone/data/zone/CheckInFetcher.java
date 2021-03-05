@@ -1,4 +1,4 @@
-package com.example.studyzone.data.user;
+package com.example.studyzone.data.zone;
 
 import android.content.Context;
 
@@ -12,39 +12,38 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RegistrationFetcher {
+public class CheckInFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "";
+    private final static String REQUEST_URL = "http://localhost:3000/";
 
-    public class RegistrationResponse{
+    public class CheckInResponse {
         public boolean isError;
         public boolean hasSucceeded;
 
-        public RegistrationResponse(boolean isError, boolean hasSucceeded){
+        public CheckInResponse(boolean isError, boolean hasSucceeded) {
             this.isError = isError;
             this.hasSucceeded = hasSucceeded;
         }
     }
 
-    public interface RegistrationResponseListener {
-        public void onResponse(RegistrationResponse response);
+    public interface CheckInResponseListener {
+        public void onResponse(CheckInResponse response);
     }
 
-    public RegistrationFetcher(Context context){
+    public CheckInFetcher(Context context) {
         _queue = Volley.newRequestQueue(context);
     }
 
-    private RegistrationResponse createErrorResponse() {
-        return new RegistrationResponse(true, false);
+    private CheckInResponse createErrorResponse() {
+        return new CheckInResponse(true, false);
     }
 
-    public void dispatchRequest(final String email, final String password,
-                                final RegistrationResponseListener listener){
+    public void dispatchRequest(final int zoneId, final String userEmail, final CheckInResponseListener listener) {
         JSONObject postBody = new JSONObject();
         try {
-            postBody.put("email", email);
-            postBody.put("password", password);
+            postBody.put("id", zoneId);
+            postBody.put("email", userEmail);
         }
         catch (JSONException e) {
             listener.onResponse(createErrorResponse());
@@ -56,7 +55,7 @@ public class RegistrationFetcher {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            RegistrationResponse res = new RegistrationResponse(false,
+                            CheckInResponse res = new CheckInResponse(false,
                                     response.getString("status").equals("Success"));
                             listener.onResponse(res);
                         }

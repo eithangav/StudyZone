@@ -1,4 +1,4 @@
-package com.example.studyzone.data.user;
+package com.example.studyzone.data.zone;
 
 import android.content.Context;
 
@@ -12,39 +12,42 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RegistrationFetcher {
+public class RateFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "";
+    private final static String REQUEST_URL = "http://localhost:3000/";
 
-    public class RegistrationResponse{
+    public class RateResponse {
         public boolean isError;
         public boolean hasSucceeded;
 
-        public RegistrationResponse(boolean isError, boolean hasSucceeded){
+        public RateResponse(boolean isError, boolean hasSucceeded) {
             this.isError = isError;
             this.hasSucceeded = hasSucceeded;
         }
     }
 
-    public interface RegistrationResponseListener {
-        public void onResponse(RegistrationResponse response);
+    public interface RateResponseListener {
+        public void onResponse(RateResponse response);
     }
 
-    public RegistrationFetcher(Context context){
+    public RateFetcher(Context context) {
         _queue = Volley.newRequestQueue(context);
     }
 
-    private RegistrationResponse createErrorResponse() {
-        return new RegistrationResponse(true, false);
+    private RateResponse createErrorResponse() {
+        return new RateResponse(true, false);
     }
 
-    public void dispatchRequest(final String email, final String password,
-                                final RegistrationResponseListener listener){
+    public void dispatchRequest(final int id, final double crowdedRating, final double foodRating,
+                                final double priceRating, final String review, final RateResponseListener listener) {
         JSONObject postBody = new JSONObject();
         try {
-            postBody.put("email", email);
-            postBody.put("password", password);
+            postBody.put("id", id);
+            postBody.put("crowdedRating", crowdedRating);
+            postBody.put("foodRating", foodRating);
+            postBody.put("priceRating", priceRating);
+            postBody.put("review", review);
         }
         catch (JSONException e) {
             listener.onResponse(createErrorResponse());
@@ -56,7 +59,7 @@ public class RegistrationFetcher {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            RegistrationResponse res = new RegistrationResponse(false,
+                            RateResponse res = new RateResponse(false,
                                     response.getString("status").equals("Success"));
                             listener.onResponse(res);
                         }
