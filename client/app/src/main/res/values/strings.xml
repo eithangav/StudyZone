@@ -12,6 +12,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_map">Map</string>
     <string name="textview">TextView</string>
+    <string name="nothing">none</string>
     <!-- Strings related to zone screen  -->
     <string name="initial_zone_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
     <string name="zone_comment_hint">Insert a new comment on this study zone...</string>
