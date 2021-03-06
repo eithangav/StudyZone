@@ -107,6 +107,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
             }
         });
 
+
         // second EditText validation
         secondEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -149,6 +150,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         Intent location_intent = new Intent(getApplicationContext(), LocationService.class);
         startService(location_intent);
         userMetaData = UserMetaData.getInstance();
+        fetchToken();
         registerReceiver(userMetaData, new IntentFilter("location_update"));
     }
 
@@ -159,6 +161,15 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
             userMetaData = UserMetaData.getInstance();
         }
         registerReceiver(userMetaData, new IntentFilter("location_update"));
+    }
+
+    private void fetchToken(){
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this,  new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                UserMetaData.getInstance().setToken(instanceIdResult.getToken());
+            }
+        });
     }
 
     private boolean runtimePermissions(){

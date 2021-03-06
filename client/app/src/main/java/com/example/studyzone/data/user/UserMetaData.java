@@ -39,6 +39,7 @@ public class UserMetaData extends BroadcastReceiver {
         this.location_listeners = new HashSet<>();
     }
 
+
     public static UserMetaData getInstance(){
         if(mInstance == null){
             mInstance = new UserMetaData();

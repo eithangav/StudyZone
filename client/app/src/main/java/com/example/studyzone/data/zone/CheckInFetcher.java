@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public class CheckInFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "http://10.0.0.23:3000/checkin";
+    private final static String REQUEST_URL = "http://192.168.1.50:3000/checkin";
 
     public class CheckInResponse {
         public boolean isError;
