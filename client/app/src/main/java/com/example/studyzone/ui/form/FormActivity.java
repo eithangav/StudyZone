@@ -200,7 +200,8 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
         final String email = ((EditText)findViewById(R.id.first_field)).getText().toString();
         final String password = ((EditText)findViewById(R.id.second_field)).getText().toString();
         final String token = "TEST_TOKEN"; // TODO: get user's real token
-        final LatLng location = new LatLng(35, 35); // TODO: get user's real location
+        final LatLng location = new LatLng(UserMetaData.getInstance().getLatitude(),
+                UserMetaData.getInstance().getLongitude());
 
         fetcher.dispatchRequest(email, password, token, location, new LoginFetcher.LoginResponseListener() {
                     @Override

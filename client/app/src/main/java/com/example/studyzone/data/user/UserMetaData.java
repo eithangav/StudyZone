@@ -52,6 +52,14 @@ public class UserMetaData extends BroadcastReceiver {
         return this.token;
     }
 
+    public double getLongitude(){
+        return this.longitude;
+    }
+
+    public double getLatitude(){
+        return this.latitude;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         this.longitude = (double) intent.getExtras().get("longitude");
