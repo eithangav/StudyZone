@@ -74,10 +74,10 @@ public class ZoneActivity extends AppCompatActivity {
         }
 
         // use helper method to set up the status bar
-        //statusBarSetUp();
+        statusBarSetUp();
 
         // fetch and set up zone's fields
-        //fetchZone();
+        fetchZone();
     }
 
     /**
@@ -209,14 +209,14 @@ public class ZoneActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     clearFoodRating.setVisibility(View.INVISIBLE);
-                    crowdedRatingBar.setRating((float)response.crowdedRating);
+                    foodRatingBar.setRating((float)response.crowdedRating);
                 }
             });
             clearPriceRating.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     clearPriceRating.setVisibility(View.INVISIBLE);
-                    crowdedRatingBar.setRating((float)response.crowdedRating);
+                    foodRatingBar.setRating((float)response.crowdedRating);
                 }
             });
 
