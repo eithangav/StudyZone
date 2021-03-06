@@ -16,7 +16,7 @@ const DB_NAME =  "FinalProjectDB";
 const FCM_SERVER_KEY = "";
 
 //init FCM
-//let fcm = new FCM(FCM_SERVER_KEY);
+let fcm = new FCM(FCM_SERVER_KEY);
 
 //init DB
 mongoose.connect(MONGO_URL + DB_NAME, {
@@ -270,7 +270,7 @@ app.post('/checkin', async (req, res) => {
             users.forEach(user => {
                 if(user.token != undefined){
                     console.log(user.token, zone.name);
-                    //send_notification(user.token, zone.name);
+                    send_notification(user.token, zone.name);
                 }
             });
         });
