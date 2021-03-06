@@ -210,7 +210,6 @@ app.get('/zone/:id', (req, res) => {
  * review (string)
  */
 app.post('/zone/:id', (req, res) => {
-    console.log("accccc");
     if(req.body.foodRating < 0 || req.body.foodRating > 5){
         res.status(500).json({status: "Fail"});
     }

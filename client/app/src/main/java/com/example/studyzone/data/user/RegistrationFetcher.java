@@ -19,7 +19,7 @@ import org.json.JSONObject;
 public class RegistrationFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "http://10.0.0.23/register";
+    private final static String REQUEST_URL = "http://192.168.1.50:3000/register";
 
     public class RegistrationResponse{
         public boolean isError;
