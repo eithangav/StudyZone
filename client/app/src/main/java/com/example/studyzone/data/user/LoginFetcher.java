@@ -1,6 +1,7 @@
 package com.example.studyzone.data.user;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,7 +20,7 @@ import org.json.JSONObject;
 public class LoginFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "http://localhost:3000/login";
+    private final static String REQUEST_URL = "http://10.0.0.23:3000/login";
 
     public class LoginResponse {
         public boolean isError;
@@ -64,6 +65,7 @@ public class LoginFetcher {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.i("login", "login successful");
                         try {
                             LoginResponse res = new LoginResponse(false,
                                     response.getString("emailExists").equals("true"),
@@ -77,6 +79,7 @@ public class LoginFetcher {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e("login", "Failed to login - " + error);
                         listener.onResponse(createErrorResponse());
                     }
                 });
