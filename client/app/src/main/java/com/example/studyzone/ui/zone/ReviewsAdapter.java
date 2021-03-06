@@ -29,7 +29,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         try {
-            ((ReviewsViewHolder)holder).review.setText(reviews.getString(position));
+            String reviewContent = reviews.getJSONObject(position).getString("content");
+            ((ReviewsViewHolder)holder).review.setText(reviewContent);
         } catch (JSONException e) {
             Log.e("ReviewsAdapter", "Error reading reviews JSON Array");
         }
