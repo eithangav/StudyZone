@@ -155,7 +155,7 @@ public class ZoneActivity extends AppCompatActivity {
             reviewsRecyclerView = findViewById(R.id.reviews);
             checkInButton = findViewById(R.id.check_in_button);
             rateButton = findViewById(R.id.rate_button);
-            commentEditText = findViewById(R.id.multiline_comment);
+            commentEditText = findViewById(R.id.comment);
 
 
             // set zone's layout fields according to the response
@@ -209,14 +209,14 @@ public class ZoneActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     clearFoodRating.setVisibility(View.INVISIBLE);
-                    foodRatingBar.setRating((float)response.crowdedRating);
+                    foodRatingBar.setRating((float)response.foodRating);
                 }
             });
             clearPriceRating.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     clearPriceRating.setVisibility(View.INVISIBLE);
-                    foodRatingBar.setRating((float)response.crowdedRating);
+                    foodRatingBar.setRating((float)response.priceRating);
                 }
             });
 
