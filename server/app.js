@@ -142,7 +142,6 @@ app.post('/register', (req, res) => {
  * No parameters are needed for this request
  */
 app.get('/zones', (req, res) => {
-    console.log("asd");
     let found_zones = []
     Zone.find((err, zones) => {
         zones.forEach(zone => {

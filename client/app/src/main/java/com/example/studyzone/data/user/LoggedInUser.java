@@ -26,4 +26,9 @@ public class LoggedInUser implements Serializable {
     public LatLng getUserLocation() {
         return new LatLng(latitude, longitude);
     }
+
+    public void updateUserLocation(LatLng location){
+        this.latitude = location.latitude;
+        this.longitude = location.longitude;
+    }
 }

@@ -17,11 +17,13 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.studyzone.ui.map.LocationUpdateEvent;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import java.util.Set;
 import java.util.concurrent.Executor;
 
 public class UserMetaData extends BroadcastReceiver {
@@ -29,9 +31,7 @@ public class UserMetaData extends BroadcastReceiver {
     private String token;
     private double latitude;
     private double longitude;
-    private LocationManager locationManager;
-    private boolean mLocationPermissionGranted = false;
-    private Context context;
+    private Set<LocationUpdateEvent> location_listeners;
 
     private UserMetaData() {
         super();
@@ -67,5 +67,17 @@ public class UserMetaData extends BroadcastReceiver {
         Log.d("asd", "" + this.longitude);
         Log.d("asd", ""+this.latitude);
         Log.d("asd", ""+this.token);
+        LatLng location = new LatLng(this.latitude, this.longitude);
+        for(LocationUpdateEvent listener: location_listeners){
+            listener.callback(location);
+        }
+    }
+
+    public void addListener(LocationUpdateEvent listener){
+        location_listeners.add(listener);
+    }
+
+    public void removeListener(LocationUpdateEvent listener){
+        location_listeners.remove(listener);
     }
 }
