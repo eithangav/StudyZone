@@ -2,6 +2,8 @@ package com.example.studyzone.ui.zone;
 
 import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -72,10 +74,10 @@ public class ZoneActivity extends AppCompatActivity {
         }
 
         // use helper method to set up the status bar
-        statusBarSetUp();
+        //statusBarSetUp();
 
         // fetch and set up zone's fields
-        fetchZone();
+        //fetchZone();
     }
 
     /**
@@ -177,21 +179,21 @@ public class ZoneActivity extends AppCompatActivity {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                     ratingBar.setRating(rating);
-                    changeRatingBarState(ratingBar, clearCrowdedRating, true);
+                    clearCrowdedRating.setVisibility(View.VISIBLE);
                 }
             });
             foodRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                     ratingBar.setRating(rating);
-                    changeRatingBarState(ratingBar, clearFoodRating, true);
+                    clearFoodRating.setVisibility(View.VISIBLE);
                 }
             });
             priceRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                     ratingBar.setRating(rating);
-                    changeRatingBarState(ratingBar, clearPriceRating, true);
+                    clearPriceRating.setVisibility(View.VISIBLE);
                 }
             });
 
@@ -199,21 +201,21 @@ public class ZoneActivity extends AppCompatActivity {
             clearCrowdedRating.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    changeRatingBarState(crowdedRatingBar, clearCrowdedRating, false);
+                    clearCrowdedRating.setVisibility(View.INVISIBLE);
                     crowdedRatingBar.setRating((float)response.crowdedRating);
                 }
             });
             clearFoodRating.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    changeRatingBarState(foodRatingBar, clearFoodRating, false);
+                    clearFoodRating.setVisibility(View.INVISIBLE);
                     crowdedRatingBar.setRating((float)response.crowdedRating);
                 }
             });
             clearPriceRating.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    changeRatingBarState(priceRatingBar, clearPriceRating, false);
+                    clearPriceRating.setVisibility(View.INVISIBLE);
                     crowdedRatingBar.setRating((float)response.crowdedRating);
                 }
             });
@@ -233,29 +235,6 @@ public class ZoneActivity extends AppCompatActivity {
                     fetchRate(v);
                 }
             });
-        }
-    }
-
-    /**
-     * a helper method to change the rating bar state.
-     * "edited" state: color in orange, show "reset" option
-     * "original" state: color in green, hide "reset" option
-     * @param ratingBar the rating bar to edit
-     * @param clearRating the relevant "reset" clickable text
-     * @param edited defines the required state
-     */
-    public void changeRatingBarState(RatingBar ratingBar, TextView clearRating, boolean edited) {
-        Drawable drawableBar = ratingBar.getProgressDrawable();
-        if(edited) {
-            drawableBar.setColorFilter(Color.parseColor("#FF9800"),
-                    PorterDuff.Mode.SRC_ATOP);
-            // make "reset" TextView visible
-            clearRating.setVisibility(View.VISIBLE);
-        } else if(clearRating.getVisibility() == View.VISIBLE) {
-            drawableBar.setColorFilter(Color.parseColor("#009688"),
-                    PorterDuff.Mode.SRC_ATOP);
-            // make "reset" TextView invisible
-            clearRating.setVisibility(View.INVISIBLE);
         }
     }
 
