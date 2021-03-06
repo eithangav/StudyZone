@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.studyzone.data.user.UserMetaData;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -61,6 +62,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onNewToken(@NonNull String s) {
+
         super.onNewToken(s);
+        UserMetaData.getInstance().setToken(s);
     }
 }
