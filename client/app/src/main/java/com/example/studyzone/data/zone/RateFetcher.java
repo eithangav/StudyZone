@@ -18,7 +18,7 @@ import org.json.JSONObject;
 public class RateFetcher {
 
     private RequestQueue _queue;
-    private String REQUEST_URL = "http://localhost:3000/zone/";
+    private String REQUEST_URL = "http://10.0.0.23:3000/zone/";
 
     public class RateResponse {
         public boolean isError;

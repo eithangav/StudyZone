@@ -210,6 +210,7 @@ app.get('/zone/:id', (req, res) => {
  * review (string)
  */
 app.post('/zone/:id', (req, res) => {
+    console.log("accccc");
     if(req.body.foodRating < 0 || req.body.foodRating > 5){
         res.status(500).json({status: "Fail"});
     }
@@ -269,7 +270,8 @@ app.post('/checkin', async (req, res) => {
             }
             users.forEach(user => {
                 if(user.token != undefined){
-                    send_notification(user.token, zone.name);
+                    console.log(user.token, zone.name);
+                    //send_notification(user.token, zone.name);
                 }
             });
         });
