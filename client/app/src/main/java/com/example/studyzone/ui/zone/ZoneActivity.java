@@ -176,18 +176,21 @@ public class ZoneActivity extends AppCompatActivity {
             crowdedRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    ratingBar.setRating(rating);
                     changeRatingBarState(ratingBar, clearCrowdedRating, true);
                 }
             });
             foodRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    ratingBar.setRating(rating);
                     changeRatingBarState(ratingBar, clearFoodRating, true);
                 }
             });
             priceRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    ratingBar.setRating(rating);
                     changeRatingBarState(ratingBar, clearPriceRating, true);
                 }
             });
@@ -197,19 +200,21 @@ public class ZoneActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     changeRatingBarState(crowdedRatingBar, clearCrowdedRating, false);
-
+                    crowdedRatingBar.setRating((float)response.crowdedRating);
                 }
             });
             clearFoodRating.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     changeRatingBarState(foodRatingBar, clearFoodRating, false);
+                    crowdedRatingBar.setRating((float)response.crowdedRating);
                 }
             });
             clearPriceRating.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     changeRatingBarState(priceRatingBar, clearPriceRating, false);
+                    crowdedRatingBar.setRating((float)response.crowdedRating);
                 }
             });
 
