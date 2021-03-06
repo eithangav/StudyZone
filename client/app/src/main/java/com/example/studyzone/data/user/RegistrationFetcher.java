@@ -8,6 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.studyzone.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +19,7 @@ import org.json.JSONObject;
 public class RegistrationFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "http://localhost:3000/register";
+    private final static String REQUEST_URL = "http://10.0.0.23/register";
 
     public class RegistrationResponse{
         public boolean isError;

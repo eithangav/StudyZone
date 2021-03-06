@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.studyzone.R;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -20,7 +21,7 @@ import org.json.JSONObject;
 public class LoginFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "http://10.0.0.23:3000/login";
+    private final static String REQUEST_URL = "http://10.0.0.23/login";
 
     public class LoginResponse {
         public boolean isError;

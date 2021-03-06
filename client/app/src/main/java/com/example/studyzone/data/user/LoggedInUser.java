@@ -10,11 +10,13 @@ import java.io.Serializable;
 public class LoggedInUser implements Serializable {
 
     private String email;
-    private LatLng location;
+    private double longitude;
+    private double latitude;
 
     public LoggedInUser(String email, LatLng location) {
         this.email = email;
-        this.location = location;
+        this.latitude = location.latitude;
+        this.longitude = location.longitude;
     }
 
     public String getUserEmail() {
@@ -22,6 +24,6 @@ public class LoggedInUser implements Serializable {
     }
 
     public LatLng getUserLocation() {
-        return location;
+        return new LatLng(latitude, longitude);
     }
 }
