@@ -1,9 +1,15 @@
 package com.example.studyzone.ui.form;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +25,8 @@ import com.example.studyzone.R;
 import com.example.studyzone.data.user.LoggedInUser;
 import com.example.studyzone.data.user.LoginFetcher;
 import com.example.studyzone.data.user.RegistrationFetcher;
+import com.example.studyzone.data.user.UserMetaData;
+import com.example.studyzone.services.LocationService;
 import com.example.studyzone.ui.map.MapActivity;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,6 +54,7 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
     private Button submitButton;
     private ProgressBar loadingProgressBar;
     private FormState formState;
+    private UserMetaData userMetaData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -136,6 +145,45 @@ public class FormActivity extends AppCompatActivity implements FormPresenterList
 
         // listener initialization
         presenter.setListener(this);
+        runtimePermissions();
+        Intent location_intent = new Intent(getApplicationContext(), LocationService.class);
+        startService(location_intent);
+        userMetaData = UserMetaData.getInstance();
+        registerReceiver(userMetaData, new IntentFilter("location_update"));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(userMetaData == null){
+            userMetaData = UserMetaData.getInstance();
+        }
+        registerReceiver(userMetaData, new IntentFilter("location_update"));
+    }
+
+    private boolean runtimePermissions(){
+        if(Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == 100){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                Intent i = new Intent(getApplicationContext(), LocationService.class);
+                startService(i);
+            }
+            else{
+                runtimePermissions();
+            }
+        }
     }
 
     /*------------------FormPresenterListener interface methods implementation--------------------------
