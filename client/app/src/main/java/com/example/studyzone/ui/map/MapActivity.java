@@ -136,6 +136,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 String name = marker.getString("name");
                 Marker current = mMap.addMarker(new MarkerOptions().position(location).title(name));
                 current.setTag(marker.getInt("_id"));
+                current.setSnippet(name);
             }
             mMap.setOnMarkerClickListener(this);
         }
@@ -178,7 +179,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             startActivity(intent);
         }
 
-        return true;
+        return false;
     }
 
 }

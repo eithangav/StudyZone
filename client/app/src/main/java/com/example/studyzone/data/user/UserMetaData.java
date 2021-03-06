@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Executor;
 
@@ -35,6 +36,7 @@ public class UserMetaData extends BroadcastReceiver {
 
     private UserMetaData() {
         super();
+        this.location_listeners = new HashSet<>();
     }
 
     public static UserMetaData getInstance(){
