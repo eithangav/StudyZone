@@ -20,7 +20,7 @@ import org.json.JSONObject;
 public class MarkersFetcher {
 
     private RequestQueue _queue;
-    private final static String REQUEST_URL = "http://localhost:3000/zones";
+    private final static String REQUEST_URL = "http://10.0.0.23/zones";
 
     public class MarkersResponse {
         public boolean isError;

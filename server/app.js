@@ -65,7 +65,6 @@ const send_notification = (token, zone) => {
  * latitude (number)
  */
 app.post('/login', (req, res) => {
-    console.log("asd");
     // verify email is not empty
     if(!req.body.email || req.body.email == ""){
         return res.status(500).json({emailExists: false, passwordMatches: false});
@@ -143,6 +142,7 @@ app.post('/register', (req, res) => {
  * No parameters are needed for this request
  */
 app.get('/zones', (req, res) => {
+    console.log("asd");
     let found_zones = []
     Zone.find((err, zones) => {
         zones.forEach(zone => {

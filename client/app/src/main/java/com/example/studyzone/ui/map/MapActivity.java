@@ -10,20 +10,23 @@ import android.widget.TextView;
 
 import com.example.studyzone.R;
 import com.example.studyzone.data.user.LoggedInUser;
+import com.example.studyzone.data.user.UserMetaData;
 import com.example.studyzone.data.zone.MarkersFetcher;
 import com.example.studyzone.ui.form.FormActivity;
+import com.example.studyzone.ui.zone.ZoneActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener{
 
     private GoogleMap mMap;
     private LoggedInUser loggedInUser;
@@ -73,12 +76,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         mMap = googleMap;
 
         // load all zones markers from DB
-        if (markers!=null)
-            loadZonesMarkers();
+        if (markers==null)
+            fetchMarkers();
 
         // TODO: change userPosition to loggedInUser.getUserLocation()
-        LatLng userLocation = new LatLng(32.07220007424625, 34.7750024858776);
-        mMap.addMarker(new MarkerOptions().position(userLocation).title("You are here"));
+        LatLng userLocation = new LatLng(UserMetaData.getInstance().getLatitude(),
+                UserMetaData.getInstance().getLongitude());
+        Marker current_location = mMap.addMarker(new MarkerOptions().position(userLocation).title("You are here"));
+        current_location.setTag(-1);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
     }
 
@@ -96,6 +101,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                     Log.e("MapActivity", "Error fetching markers");
                 else{
                     markers = response.markers;
+                    loadZonesMarkers();
                 }
             }
         });
@@ -111,13 +117,16 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 LatLng location = new LatLng(marker.getDouble("latitude"),
                         marker.getDouble("longitude"));
                 String name = marker.getString("name");
-                mMap.addMarker(new MarkerOptions().position(location).title(name));
+                Marker current = mMap.addMarker(new MarkerOptions().position(location).title(name));
+                current.setTag(marker.getInt("_id"));
             }
+            mMap.setOnMarkerClickListener(this);
         }
         catch (JSONException e) {
             Log.e("MapActivity", "Error loading markers");
         }
     }
+
 
     public void statusBarSetUp() {
         // get status_bar layout fields
@@ -136,5 +145,21 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        int id = (int) marker.getTag();
+        Log.i("Marker", "Marker clicked : " + id);
+        if(id != -1){
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("loggedInUser", loggedInUser);
+            bundle.putInt("zoneId", id);
+            Intent intent = new Intent(this, ZoneActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+
+        return true;
     }
 }
