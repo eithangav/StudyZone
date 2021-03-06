@@ -42,8 +42,8 @@ public class RateFetcher {
         return new RateResponse(true, false);
     }
 
-    public void dispatchRequest(final int id, final double crowdedRating, final double foodRating,
-                                final double priceRating, final String review, final RateResponseListener listener) {
+    public void dispatchRequest(final int id, final float crowdedRating, final float foodRating,
+                                final float priceRating, final String review, final RateResponseListener listener) {
         this.REQUEST_URL += String.valueOf(id);
         JSONObject postBody = new JSONObject();
         try {

@@ -1,9 +1,18 @@
 package com.example.studyzone.ui.zone;
 
+import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +28,8 @@ import com.example.studyzone.data.zone.RateFetcher;
 import com.example.studyzone.data.zone.ZoneFetcher;
 import com.example.studyzone.ui.form.FormActivity;
 import com.example.studyzone.ui.map.MapActivity;
+
+import org.json.JSONArray;
 
 public class ZoneActivity extends AppCompatActivity {
 
@@ -36,19 +47,20 @@ public class ZoneActivity extends AppCompatActivity {
     private RatingBar crowdedRatingBar;
     private RatingBar foodRatingBar;
     private RatingBar priceRatingBar;
+    private TextView clearCrowdedRating;
+    private TextView clearFoodRating;
+    private TextView clearPriceRating;
     private Button checkInButton;
     private EditText commentEditText;
-    // TODO: add layout objects:
-    //private XXX reviews
-    //private Button rateButton
-
+    private RecyclerView reviewsRecyclerView;
+    private Button rateButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zone);
 
-        //sets the required loggedInUser derived from the intent's trigger caller
+        //sets the required loggedInUser and zone's ID derived from the intent's trigger caller
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null){
             LoggedInUser user = (LoggedInUser)bundle.getSerializable("loggedInUser");
@@ -64,16 +76,6 @@ public class ZoneActivity extends AppCompatActivity {
 
         // fetch and set up zone's fields
         fetchZone();
-
-        // check in button onClick listener
-        checkInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fetchCheckIn(v);
-            }
-        });
-
-        // TODO: implement onClick for Rate button
     }
 
     /**
@@ -145,8 +147,14 @@ public class ZoneActivity extends AppCompatActivity {
             crowdedRatingBar = findViewById(R.id.crowded_rating_bar);
             foodRatingBar = findViewById(R.id.food_rating_bar);
             priceRatingBar = findViewById(R.id.price_rating_bar);
-            // TODO: after adding layout objects:
-            // reviews = findView...
+            clearCrowdedRating = findViewById(R.id.clear_crowded_rating);
+            clearFoodRating = findViewById(R.id.clear_food_rating);
+            clearPriceRating = findViewById(R.id.clear_price_rating);
+            reviewsRecyclerView = findViewById(R.id.reviews);
+            checkInButton = findViewById(R.id.check_in_button);
+            rateButton = findViewById(R.id.rate_button);
+            commentEditText = findViewById(R.id.multiline_comment);
+
 
             // set zone's layout fields according to the response
             zoneNameTextView.setText(response.name);
@@ -154,8 +162,95 @@ public class ZoneActivity extends AppCompatActivity {
             crowdedRatingBar.setRating((float)response.crowdedRating);
             foodRatingBar.setRating((float)response.foodRating);
             priceRatingBar.setRating((float)response.priceRating);
-            // TODO: after adding layout objects:
-            // reviews. ...
+            clearCrowdedRating.setVisibility(View.INVISIBLE);
+            clearFoodRating.setVisibility(View.INVISIBLE);
+            clearPriceRating.setVisibility(View.INVISIBLE);
+
+            // load reviews
+            JSONArray reviews = response.reviews;
+            reviewsRecyclerView.setHasFixedSize(true);
+            reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            reviewsRecyclerView.setAdapter(new ReviewsAdapter(reviews));
+
+            // rating bars editors
+            crowdedRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    changeRatingBarState(ratingBar, clearCrowdedRating, true);
+                }
+            });
+            foodRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    changeRatingBarState(ratingBar, clearFoodRating, true);
+                }
+            });
+            priceRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    changeRatingBarState(ratingBar, clearPriceRating, true);
+                }
+            });
+
+            // "reset" rating bars listeners
+            clearCrowdedRating.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeRatingBarState(crowdedRatingBar, clearCrowdedRating, false);
+
+                }
+            });
+            clearFoodRating.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeRatingBarState(foodRatingBar, clearFoodRating, false);
+                }
+            });
+            clearPriceRating.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeRatingBarState(priceRatingBar, clearPriceRating, false);
+                }
+            });
+
+            // check in button listener
+            checkInButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fetchCheckIn(v);
+                }
+            });
+
+            // rate button listener
+            rateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fetchRate(v);
+                }
+            });
+        }
+    }
+
+    /**
+     * a helper method to change the rating bar state.
+     * "edited" state: color in orange, show "reset" option
+     * "original" state: color in green, hide "reset" option
+     * @param ratingBar the rating bar to edit
+     * @param clearRating the relevant "reset" clickable text
+     * @param edited defines the required state
+     */
+    public void changeRatingBarState(RatingBar ratingBar, TextView clearRating, boolean edited) {
+        Drawable drawableBar = ratingBar.getProgressDrawable();
+        if(edited) {
+            drawableBar.setColorFilter(Color.parseColor("#FF9800"),
+                    PorterDuff.Mode.SRC_ATOP);
+            // make "reset" TextView visible
+            clearRating.setVisibility(View.VISIBLE);
+        } else if(clearRating.getVisibility() == View.VISIBLE) {
+            drawableBar.setColorFilter(Color.parseColor("#009688"),
+                    PorterDuff.Mode.SRC_ATOP);
+            // make "reset" TextView invisible
+            clearRating.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -169,14 +264,14 @@ public class ZoneActivity extends AppCompatActivity {
         // server request
         fetcher.dispatchRequest(id, loggedInUser.getUserEmail(),
                 new CheckInFetcher.CheckInResponseListener() {
-            @Override
-            public void onResponse(CheckInFetcher.CheckInResponse response) {
-                if (response.isError)
-                    Log.e("ZoneActivity", "Error fetching CheckIn");
-                else
-                    Toast.makeText(view.getContext(), "Successfully checked in!", Toast.LENGTH_LONG).show();
-            }
-        });
+                    @Override
+                    public void onResponse(CheckInFetcher.CheckInResponse response) {
+                        if (response.isError || !response.hasSucceeded)
+                            Log.e("ZoneActivity", "Error fetching CheckIn");
+                        else
+                            Toast.makeText(view.getContext(), "Successfully checked in!", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     /**
@@ -186,13 +281,20 @@ public class ZoneActivity extends AppCompatActivity {
     public void fetchRate(View view) {
         final RateFetcher fetcher = new RateFetcher(this);
 
-        final int crowdedUserRating;
-        final int foodUserRating;
-        final int priceUserRating;
-        final String userReview;
+        final float crowdedUserRating = crowdedRatingBar.getRating();
+        final float foodUserRating = foodRatingBar.getRating();
+        final float priceUserRating = priceRatingBar.getRating();
+        String userReview = commentEditText.getText().toString();
 
-        // TODO: get users rating from the layout objects and fetch
-
-        //fetcher.dispatchRequest(id, );
+        fetcher.dispatchRequest(id, crowdedUserRating, foodUserRating, priceUserRating, userReview,
+                new RateFetcher.RateResponseListener() {
+                    @Override
+                    public void onResponse(RateFetcher.RateResponse response) {
+                        if (response.isError || !response.hasSucceeded)
+                            Log.e("ZoneActivity", "Error fetching Rate");
+                        else
+                            Toast.makeText(view.getContext(), "Thank you for your rating!", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }
